@@ -30,12 +30,11 @@ class simpleImageLoader(Dataset):
         img_name = os.path.join(self.root_dir,
                                 self.labels.iloc[idx, 0])
         image = io.imread(img_name +'.jpg')
-        labels = self.labels.iloc[idx, 1:]
-        labels = np.array([labels])
-        #labels = labels.astype('float').reshape(-1, 2)
-        sample = {'image': image, 'labels': labels}
+        label = self.labels.iloc[idx, 1:]
+        label = np.array([label])
+        label = label.astype('int')
 
-        if self.transform:
-            sample = self.transform(sample)
+        if self.transform is not None:
+            image = self.transform(image)
 
-        return sample
+        return image, torch.from_numpy(label), self.labels.iloc[idx, 0]
